@@ -39,8 +39,8 @@ class API {
 	protected $last_response;
 
 	/**
-	 * @param string        $api_url
-	 * @param Notices       $notices
+	 * @param string  $api_url
+	 * @param Notices $notices
 	 */
 	public function __construct( $api_url, Notices $notices ) {
 		$this->api_url = $api_url;
@@ -54,11 +54,11 @@ class API {
 	 */
 	public function login() {
 		$endpoint = '/login';
-		$args = array(
+		$args     = array(
 			'method' => 'POST'
 		);
-		$result = $this->call( $endpoint, $args );
-		if( $result ) {
+		$result   = $this->call( $endpoint, $args );
+		if ( $result ) {
 			$this->notices->add( $result->message, 'info' );
 			return true;
 		}
@@ -73,9 +73,9 @@ class API {
 	 */
 	public function logout() {
 		$endpoint = '/logout';
-		$result = $this->call( $endpoint );
+		$result   = $this->call( $endpoint );
 
-		if( $result ) {
+		if ( $result ) {
 			$this->notices->add( $result->message, 'info' );
 			return true;
 		}
@@ -84,7 +84,7 @@ class API {
 	}
 
 	/**
-	 * @param iPlugin $plugin
+	 * @param  iPlugin $plugin
 	 * @return object
 	 */
 	public function get_plugin( iPlugin $plugin ) {
@@ -93,7 +93,7 @@ class API {
 	}
 
 	/**
-	 * @param Collection $plugins
+	 * @param  Collection $plugins
 	 * @return object
 	 */
 	public function get_plugins( Collection $plugins ) {
@@ -102,30 +102,29 @@ class API {
 			function( $p ) { return $p->id(); }
 		);
 
-		$endpoint = add_query_arg( array( 'ids' => implode(',', $plugin_ids ), 'format' => 'wp' ), '/plugins' );
+		$endpoint = add_query_arg( array( 'ids' => implode( ',', $plugin_ids ), 'format' => 'wp' ), '/plugins' );
 		return $this->call( $endpoint );
 	}
 
 	/**
-	 * @param string $endpoint
-	 * @param array $args
+	 * @param  string $endpoint
+	 * @param  array  $args
 	 * @return object
 	 */
-	public function call( $endpoint,$args = array() ) {
-
+	public function call( $endpoint, $args = array() ) {
 		$request = wp_remote_request( $this->api_url . $endpoint, $args );
 
 		// test for wp errors
-		if( is_wp_error( $request ) ) {
+		if ( is_wp_error( $request ) ) {
 			$this->notices->add( $request->get_error_message(), 'error' ); ;
 			return false;
 		}
 
 		// retrieve response body
-		$body = wp_remote_retrieve_body( $request );
+		$body     = wp_remote_retrieve_body( $request );
 		$response = json_decode( $body );
-		if( ! is_object( $response ) ) {
-			$this->notices->add( __( "The Scroll Triggered Boxes server returned an invalid response.", 'scroll-triggered-boxes' ), 'error' );
+		if ( ! is_object( $response ) ) {
+			$this->notices->add( __( 'The Scroll Triggered Boxes server returned an invalid response.', 'scroll-triggered-boxes' ), 'error' );
 			return false;
 		}
 
@@ -133,7 +132,7 @@ class API {
 		$this->last_response = $response;
 
 		// did request return an error response?
-		if( isset( $response->error ) ) {
+		if ( isset( $response->error ) ) {
 			$this->notices->add( $response->error->message, 'error' );
 			return null;
 		}
