@@ -49,11 +49,11 @@ function scroll_triggered_boxes() {
 		$name = 'Scroll Triggered Boxes';
 		$version = '2.2.1';
 
-		$instance = new $classname( 
-			$id, 
-			$name, 
-			$version, 
-			$file, 
+		$instance = new $classname(
+			$id,
+			$name,
+			$version,
+			$file,
 			$dir
 		);
 	}
