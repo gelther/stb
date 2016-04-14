@@ -16,8 +16,9 @@ class AdminServiceProvider implements ServiceProviderInterface {
 	 * @param Container $container An Container instance
 	 */
 	public function register( Container $container ) {
-		$container['notices'] = function($container) {
+		$container['notices'] = function( $container ) {
 			return new Notices();
 		};
 	}
+
 }
