@@ -19,7 +19,7 @@ class PluginServiceProvider implements ServiceProviderInterface {
 	 */
 	public function register( Container $container ) {
 		$container['options'] = function( $app ) {
-			$defaults = array(
+			$defaults             = array(
 				'test_mode' => 0
 			);
 
@@ -29,7 +29,7 @@ class PluginServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container['plugins'] = function( $app ) {
-			$plugins = (array) apply_filters( 'stb_extensions', array() );
+			$plugins              = (array) apply_filters( 'stb_extensions', array() );
 			return new Collection( $plugins );
 		};
 
@@ -45,4 +45,5 @@ class PluginServiceProvider implements ServiceProviderInterface {
 			return new Filter\Autocomplete();
 		};
 	}
+
 }

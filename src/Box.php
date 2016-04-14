@@ -43,9 +43,8 @@ class Box {
 	 * @param \WP_Post|int $post
 	 */
 	public function __construct( $post ) {
-
 		// fetch post if it hasn't been fetched yet
-		if( is_int( $post ) ) {
+		if ( is_int( $post ) ) {
 			$post = get_post( $post );
 		}
 
@@ -74,36 +73,35 @@ class Box {
 	 * @return array Array of box options
 	 */
 	protected function load_options() {
-
 		static $defaults = array(
-			'css' => array(
+			'css'                 => array(
 				'background_color' => '',
-				'color' => '',
-				'width' => '',
-				'border_color' => '',
-				'border_width' => '',
-				'border_style' => '',
-				'position' => 'bottom-right',
-				'manual' => ''
+				'color'            => '',
+				'width'            => '',
+				'border_color'     => '',
+				'border_width'     => '',
+				'border_style'     => '',
+				'position'         => 'bottom-right',
+				'manual'           => ''
 			),
-			'rules' => array(
-				0 => array('condition' => '', 'value' => '')
+			'rules'               => array(
+				0 => array( 'condition' => '', 'value' => '' )
 			),
-			'rules_comparision' => 'any',
-			'cookie' => 0,
-			'trigger' => 'percentage',
-			'trigger_percentage' => 65,
-			'trigger_element' => '',
-			'animation' => 'fade',
-			'auto_hide' => 0,
+			'rules_comparision'   => 'any',
+			'cookie'              => 0,
+			'trigger'             => 'percentage',
+			'trigger_percentage'  => 65,
+			'trigger_element'     => '',
+			'animation'           => 'fade',
+			'auto_hide'           => 0,
 			'hide_on_screen_size' => '',
-			'unclosable' => false,
+			'unclosable'          => false,
 		);
 
 		$opts = get_post_meta( $this->ID, 'stb_options', true );
 
 		// merge CSS options
-		if( ! isset( $opts['css'] ) ) {
+		if ( ! isset( $opts['css'] ) ) {
 			$opts['css'] = $defaults['css'];
 		} else {
 			$opts['css'] = array_merge( $defaults['css'], $opts['css'] );
@@ -141,7 +139,6 @@ class Box {
 	 * @return string
 	 */
 	public function get_css_classes() {
-
 		// default classes
 		$classes = array(
 			'scroll-triggered-box',
@@ -183,7 +180,6 @@ class Box {
 	 * @return int
 	 */
 	public function get_minimum_screen_size() {
-
 		/**
 		 * @filter stb_auto_hide_small_screens
 		 * @expects bool
@@ -194,7 +190,7 @@ class Box {
 		 */
 		$auto_hide_small_screens = apply_filters( 'stb_auto_hide_small_screens', true, $this );
 
-		if( '' === $this->options['hide_on_screen_size'] && $auto_hide_small_screens ) {
+		if ( '' === $this->options['hide_on_screen_size'] && $auto_hide_small_screens ) {
 			$minimum_screen_size = absint( $this->options['css']['width'] );
 		} elseif( $this->options['hide_on_screen_size'] > 0 ) {
 			$minimum_screen_size = absint( $this->options['hide_on_screen_size'] );
@@ -209,7 +205,7 @@ class Box {
 	 * Output HTML of this box
 	 */
 	public function print_html() {
-		$opts = $this->options;
+		$opts       = $this->options;
 		$close_icon = $this->get_close_icon();
 			?>
 			<div class="stb-container stb-<?php echo esc_attr( $opts['css']['position'] ); ?>-container">
@@ -223,7 +219,7 @@ class Box {
 						do_action( 'stb_print_box_content_after', $this );
 						?>
 					</div>
-					<?php if( ! empty( $close_icon ) && ! $this->options['unclosable'] ) { ?>
+					<?php if ( ! empty( $close_icon ) && ! $this->options['unclosable'] ) { ?>
 						<span class="stb-close"><?php echo $this->get_close_icon(); ?></span>
 					<?php } ?>
 				</div>
@@ -239,9 +235,8 @@ class Box {
 	 * @param bool $open_style_element
 	 */
 	public function print_css( $open_style_element = false ) {
-
 		// only print this once
-		if( $this->css_printed ) {
+		if ( $this->css_printed ) {
 			return;
 		}
 
@@ -250,11 +245,11 @@ class Box {
 		// run filters
 		$minimum_screen_size = $this->get_minimum_screen_size();
 
-		if( $open_style_element ) {
+		if ( $open_style_element ) {
 			echo '<style type="text/css">' . PHP_EOL;
 		}
 
-		printf( "/* Custom Styles for Box %d */", $this->ID );
+		printf( '/* Custom Styles for Box %d */', $this->ID );
 		print PHP_EOL;
 
 		// open selector wrapper
@@ -275,22 +270,22 @@ class Box {
 			print PHP_EOL;
 		}
 
-		if( '' !== $css['border_width'] ) {
+		if ( '' !== $css['border_width'] ) {
 			printf( 'border-width: %dpx !important;', absint( $css['border_width'] ) );
 			print PHP_EOL;
 		}
 
-		if( '' !== $css['border_style'] ) {
+		if ( '' !== $css['border_style'] ) {
 			printf( 'border-style: %s !important;', strip_tags( $css['border_style'] ) );
 			print PHP_EOL;
 		}
 
-		if( ! empty( $css['width'] ) ) {
+		if ( ! empty( $css['width'] ) ) {
 			printf( 'max-width: %dpx;', absint( $css['width'] ) );
 			print PHP_EOL;
 		}
 
-		if( $minimum_screen_size > 0 ) {
+		if ( $minimum_screen_size > 0 ) {
 			printf( '@media ( max-width: %dpx ) { #stb-%d { display: none !important; } }', $minimum_screen_size, $this->ID );
 			print PHP_EOL;
 		}
@@ -299,16 +294,17 @@ class Box {
 		echo '}' . PHP_EOL . PHP_EOL;
 
 		// print manual css
-		if( '' !== $css['manual'] ) {
+		if ( '' !== $css['manual'] ) {
 			echo strip_tags( $css['manual'] );
 		}
 
 		do_action( 'stb_box_print_css', $this );
 
-		if( $open_style_element ) {
+		if ( $open_style_element ) {
 			echo '</style>' . PHP_EOL;
 		}
 
 		$this->css_printed = true;
 	}
+
 }

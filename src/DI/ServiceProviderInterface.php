@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of Pimple.
  *
  * Copyright (c) 2009 Fabien Potencier
@@ -34,13 +34,13 @@ namespace ScrollTriggeredBoxes\DI;
  */
 interface ServiceProviderInterface
 {
-    /**
-     * Registers services on the given container.
-     *
-     * This method should only be used to configure services and parameters.
-     * It should not get services.
-     *
-     * @param Container $container A Container instance
-     */
-    public function register(Container $container);
+	/**
+	 * Registers services on the given container.
+	 *
+	 * This method should only be used to configure services and parameters.
+	 * It should not get services.
+	 *
+	 * @param Container $container A Container instance
+	 */
+	public function register( Container $container );
 }
