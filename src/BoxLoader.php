@@ -19,24 +19,24 @@ class BoxLoader {
 	 *
 	 * @param iPlugin $plugin
 	 */
-	public function __construct( iPlugin $plugin ) {
+	public function __construct( iPlugin $plugin ) { 
 		$this->plugin = $plugin;
 	}
 
 	/**
 	 * Initializes the plugin, runs on `wp` hook.
 	 */
-	public function init() {
+	public function init() { 
 
 		$this->matched_box_ids = $this->filter_boxes();
 
 		// Only add other hooks if necessary
-		if( count( $this->matched_box_ids ) > 0 ) {
+		if ( count( $this->matched_box_ids ) > 0 ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'load_assets' ) );
 			add_action( 'wp_head', array( $this, 'print_boxes_css' ), 90 );
 			add_action( 'wp_footer', array( $this, 'print_boxes_html' ) );
 
-			add_filter( 'stb_box_content', 'wptexturize') ;
+			add_filter( 'stb_box_content', 'wptexturize' ) ;
 			add_filter( 'stb_box_content', 'convert_smilies' );
 			add_filter( 'stb_box_content', 'convert_chars' );
 			add_filter( 'stb_box_content', 'wpautop' );
@@ -50,10 +50,10 @@ class BoxLoader {
 	 *
 	 * @return array
 	 */
-	protected function get_filter_rules() {
+	protected function get_filter_rules() { 
 		$rules = get_option( 'stb_rules', array() );
 
-		if( ! is_array( $rules ) ) {
+		if ( ! is_array( $rules ) ) {
 			return array();
 		}
 
@@ -69,20 +69,20 @@ class BoxLoader {
 	 *
 	 * @return boolean
 	 */
-	protected function match_patterns( $string, $patterns ) {
+	protected function match_patterns( $string, $patterns ) { 
 		$string = strtolower( $string );
 
-		foreach( $patterns as $pattern ) {
+		foreach ( $patterns as $pattern ) {
 
 			$pattern = strtolower( $pattern );
 
-			if( function_exists( 'fnmatch' ) ) {
+			if ( function_exists( 'fnmatch' ) ) {
 				$match = fnmatch( $pattern, $string );
 			} else {
 				$match = ( $pattern === $string );
 			}
 
-			if( $match ) {
+			if ( $match ) {
 				return true;
 			}
 		}
@@ -98,7 +98,7 @@ class BoxLoader {
 	 *
 	 * @return bool|mixed
 	 */
-	protected function match_rule( $condition, $value ) {
+	protected function match_rule( $condition, $value ) { 
 
 		$matched = false;
 		$value = trim( $value );
@@ -118,7 +118,7 @@ class BoxLoader {
 				break;
 
 			case 'is_referer':
-				if( ! empty( $_SERVER['HTTP_REFERER'] ) ) {
+				if ( ! empty( $_SERVER['HTTP_REFERER'] ) ) {
 					$referer = $_SERVER['HTTP_REFERER'];
 					$matched = $this->match_patterns( $referer, $value );
 				}
@@ -154,8 +154,8 @@ class BoxLoader {
 				// eval for now...
 				$value = stripslashes( trim( $value ) );
 
-				if( ! empty( $value ) ) {
-					$matched = eval( "return (" . $value . ");" );
+				if ( ! empty( $value ) ) {
+					$matched = eval( 'return (' . $value . ');' );
 				}
 
 				break;
@@ -170,12 +170,12 @@ class BoxLoader {
 	 *
 	 * @return array
 	 */
-	private function filter_boxes() {
+	private function filter_boxes() { 
 
 		$matched_box_ids = array();
 		$rules = $this->get_filter_rules();
 
-		foreach( $rules as $box_id => $box_rules ) {
+		foreach ( $rules as $box_id => $box_rules ) {
 
 			$matched = false;
 			$comparision = isset( $box_rules['comparision'] ) ? $box_rules['comparision'] : 'any';
@@ -184,18 +184,18 @@ class BoxLoader {
 			foreach ( $box_rules as $rule ) {
 
 				// skip faulty values (and comparision rule)
-				if( empty( $rule['condition'] ) ) {
+				if ( empty( $rule['condition'] ) ) {
 					continue;
 				}
 
 				$matched = $this->match_rule( $rule['condition'], $rule['value'] );
 
 				// break out of loop if we've already matched
-				if( $comparision === 'any' && $matched ) {
+				if ( $comparision === 'any' && $matched ) {
 					break;
 				}
 
-				if( $comparision === 'all' && ! $matched ) {
+				if ( $comparision === 'all' && ! $matched ) {
 					break;
 				}
 			}
@@ -232,14 +232,14 @@ class BoxLoader {
 	/**
 	* Load plugin styles
 	*/
-	public function load_assets() {
+	public function load_assets() { 
 		$pre_suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		// stylesheets
 		wp_register_style( 'scroll-triggered-boxes', $this->plugin->url( '/assets/css/styles' . $pre_suffix . '.css' ), array(), $this->plugin->version() );
 
 		// scripts
-		wp_register_script( 'scroll-triggered-boxes',$this->plugin->url( '/assets/js/script' . $pre_suffix . '.js' ), array( 'jquery' ), $this->plugin->version(), true );
+		wp_register_script( 'scroll-triggered-boxes', $this->plugin->url( '/assets/js/script' . $pre_suffix . '.js' ), array( 'jquery' ), $this->plugin->version(), true );
 
 		// Finally, enqueue style.
 		wp_enqueue_style( 'scroll-triggered-boxes' );
@@ -255,22 +255,22 @@ class BoxLoader {
 	 *
 	 * @return array An array of `Box` objects.
 	 */
-	public function get_matched_boxes() {
+	public function get_matched_boxes() { 
 		static $boxes;
 
-		if( is_null( $boxes ) ) {
+		if ( is_null( $boxes ) ) {
 
-			if( count( $this->matched_box_ids ) === 0 ) {
+			if ( count( $this->matched_box_ids ) === 0 ) {
 				$boxes = array();
 				return $boxes;
 			}
 
 			// query Box posts
-			$boxes = get_posts(
-				array(
-					'post_type' => 'scroll-triggered-box',
-					'post_status' => 'publish',
-					'post__in'    => $this->matched_box_ids,
+			$boxes = get_posts( 
+				array( 
+					'post_type' => 'scroll-triggered-box', 
+					'post_status' => 'publish', 
+					'post__in'    => $this->matched_box_ids, 
 					'numberposts' => -1
 				)
 			);
@@ -287,11 +287,11 @@ class BoxLoader {
 	/**
 	 * Create array of Box options and pass it to JavaScript script.
 	 */
-	public function pass_box_options() {
+	public function pass_box_options() { 
 
 		// create STB_Global_Options object
 		$plugin_options = $this->plugin['options'];
-		$global_options = array(
+		$global_options = array( 
 			'testMode' => (bool) $plugin_options['test_mode']
 		);
 		wp_localize_script( 'scroll-triggered-boxes', 'STB_Global_Options', $global_options );
@@ -299,24 +299,24 @@ class BoxLoader {
 
 		// create STB_Box_Options object
 		$boxes_options = array();
-		foreach( $this->get_matched_boxes() as $box ) {
+		foreach ( $this->get_matched_boxes() as $box ) {
 
 			/* @var $box Box */
 
 			// create array with box options
-			$options = array(
-				'id' => $box->ID,
-				'title' => $box->title,
-				'trigger' => $box->options['trigger'],
-				'triggerPercentage' => absint( $box->options['trigger_percentage'] ),
-				'triggerElementSelector' => $box->options['trigger_element'],
-				'animation' => $box->options['animation'],
-				'cookieTime' => absint( $box->options['cookie'] ),
-				'autoHide' => (bool) $box->options['auto_hide'],
-				'autoShow' => (bool) $box->options['auto_show'],
-				'position' => $box->options['css']['position'],
-				'minimumScreenWidth' => $box->get_minimum_screen_size(),
-				'unclosable' => $box->options['unclosable'],
+			$options = array( 
+				'id' => $box->ID, 
+				'title' => $box->title, 
+				'trigger' => $box->options['trigger'], 
+				'triggerPercentage' => absint( $box->options['trigger_percentage'] ), 
+				'triggerElementSelector' => $box->options['trigger_element'], 
+				'animation' => $box->options['animation'], 
+				'cookieTime' => absint( $box->options['cookie'] ), 
+				'autoHide' => (bool) $box->options['auto_hide'], 
+				'autoShow' => (bool) $box->options['auto_show'], 
+				'position' => $box->options['css']['position'], 
+				'minimumScreenWidth' => $box->get_minimum_screen_size(), 
+				'unclosable' => $box->options['unclosable'], 
 			);
 
 			$boxes_options[ $box->ID ] = $options;
@@ -328,7 +328,7 @@ class BoxLoader {
 	/**
 	* Outputs the boxes in the footer
 	*/
-	public function print_boxes_html() {
+	public function print_boxes_html() { 
 		?><!-- Scroll Triggered Boxes v<?php echo $this->plugin->version(); ?> - https://wordpress.org/plugins/scroll-triggered-boxes/--><?php
 
 		// print HTML for each of the boxes
@@ -345,7 +345,7 @@ class BoxLoader {
 	/**
 	 * Print CSS of all boxes in <head>
 	 */
-	public function print_boxes_css() {
+	public function print_boxes_css() { 
 		echo '<style type="text/css">' . PHP_EOL;
 
 		// print HTML for each of the boxes
@@ -359,5 +359,3 @@ class BoxLoader {
 
 
 }
-
-
