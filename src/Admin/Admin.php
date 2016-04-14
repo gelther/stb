@@ -18,14 +18,14 @@ class Admin {
 	/**
 	 * @param iPlugin $plugin
 	 */
-	public function __construct( iPlugin $plugin ) {
+	public function __construct( iPlugin $plugin ) { 
 		$this->plugin = $plugin;
 	}
 
 	/**
 	 * Initialise the all admin related stuff
 	 */
-	public function init() {
+	public function init() { 
 		$this->register_services();
 
 		// Load the plugin textdomain
@@ -38,7 +38,7 @@ class Admin {
 	/**
 	 * Registers services into the Service Container
 	 */
-	protected function register_services() {
+	protected function register_services() { 
 		$provider = new AdminServiceProvider();
 		$provider->register( $this->plugin );
 
@@ -51,7 +51,7 @@ class Admin {
 	/**
 	 * Add necessary hooks
 	 */
-	protected function add_hooks() {
+	protected function add_hooks() { 
 
 		add_action( 'admin_init', array( $this, 'lazy_add_hooks' ) );
 		add_action( 'admin_init', array( $this, 'register' ) );
@@ -69,15 +69,15 @@ class Admin {
 		}
 	}
 
-	public function lazy_add_hooks() {
+	public function lazy_add_hooks() { 
 		global $pagenow;
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'load_assets' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 		add_filter( 'tiny_mce_before_init', array( $this, 'tinymce_init' ) );
 		add_filter( 'manage_edit-scroll-triggered-box_columns', array( $this, 'post_type_column_titles' ) );
-		add_action( 'manage_scroll-triggered-box_posts_custom_column', array(
-			$this,
+		add_action( 'manage_scroll-triggered-box_posts_custom_column', array( 
+			$this, 
 			'post_type_column_content'
 		), 10, 2 );
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ) );
@@ -92,7 +92,7 @@ class Admin {
 	/**
 	 * @param $post_id
 	 */
-	public function post_type_column_box_id_content( $post_id ) {
+	public function post_type_column_box_id_content( $post_id ) { 
 		echo $post_id;
 	}
 
@@ -100,7 +100,7 @@ class Admin {
 	 * @param $column
 	 * @param $post_id
 	 */
-	public function post_type_column_content( $column, $post_id ) {
+	public function post_type_column_content( $column, $post_id ) { 
 		if ( method_exists( $this, 'post_type_column_' . $column . '_content' ) ) {
 			call_user_func( array( $this, 'post_type_column_' . $column . '_content' ), $post_id );
 		}
@@ -111,8 +111,8 @@ class Admin {
 	 *
 	 * @return mixed
 	 */
-	public function post_type_column_titles( $columns ) {
-		$columns = self::array_insert( $columns, array(
+	public function post_type_column_titles( $columns ) { 
+		$columns = self::array_insert( $columns, array( 
 			'box_id' => __( 'Box ID', 'scroll-triggered-box' )
 		), 1 );
 
@@ -124,7 +124,7 @@ class Admin {
 	/**
 	 * Register stuffs
 	 */
-	public function register() {
+	public function register() { 
 
 		// register settings
 		register_setting( 'stb_settings', 'stb_settings', array( $this, 'sanitize_settings' ) );
@@ -132,10 +132,10 @@ class Admin {
 		// register scripts
 		$pre_suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
-		wp_register_script( 'scroll-triggered-boxes-admin', $this->plugin->url( '/assets/js/admin-script' . $pre_suffix . '.js' ), array(
-			'jquery',
-			'wp-util',
-			'wp-color-picker',
+		wp_register_script( 'scroll-triggered-boxes-admin', $this->plugin->url( '/assets/js/admin-script' . $pre_suffix . '.js' ), array( 
+			'jquery', 
+			'wp-util', 
+			'wp-color-picker', 
 			'suggest'
 		), $this->plugin->version(), true );
 
@@ -146,19 +146,19 @@ class Admin {
 	/**
 	 * Renders the STB Menu items
 	 */
-	public function menu() {
+	public function menu() { 
 
-		$menu_items = array(
-			array(
-				__( 'Settings', 'scroll-triggered-boxes' ),
-				__( 'Settings', 'scroll-triggered-boxes' ),
-				'stb-settings',
+		$menu_items = array( 
+			array( 
+				__( 'Settings', 'scroll-triggered-boxes' ), 
+				__( 'Settings', 'scroll-triggered-boxes' ), 
+				'stb-settings', 
 				array( $this, 'show_settings_page' )
-			),
-			array(
-				__( 'Extensions', 'scroll-triggered-boxes' ),
-				'<span style="color: orange">' . __( 'Extensions', 'scroll-triggered-boxes' ) . '</span>',
-				'stb-extensions',
+			), 
+			array( 
+				__( 'Extensions', 'scroll-triggered-boxes' ), 
+				'<span style="color: orange">' . __( 'Extensions', 'scroll-triggered-boxes' ) . '</span>', 
+				'stb-extensions', 
 				array( $this, 'show_extensions_page' )
 			)
 		);
@@ -173,7 +173,7 @@ class Admin {
 	/**
 	 * Shows the settings page
 	 */
-	public function show_settings_page() {
+	public function show_settings_page() { 
 		$opts = $this->plugin['options'];
 		require __DIR__ . '/views/settings.php';
 	}
@@ -181,7 +181,7 @@ class Admin {
 	/**
 	 * Shows the extensions page
 	 */
-	public function show_extensions_page() {
+	public function show_extensions_page() { 
 		$extensions = $this->fetch_extensions();
 		require __DIR__ . '/views/extensions.php';
 	}
@@ -191,7 +191,7 @@ class Admin {
 	 *
 	 * @return bool
 	 */
-	protected function on_edit_box_page() {
+	protected function on_edit_box_page() { 
 		global $pagenow;
 
 		if ( ! in_array( $pagenow, array( 'post-new.php', 'post.php' ) ) ) {
@@ -214,7 +214,7 @@ class Admin {
 	 *
 	 * @return mixed
 	 */
-	public function tinymce_init( $args ) {
+	public function tinymce_init( $args ) { 
 
 		// only act on our post type
 		if ( get_post_type() !== 'scroll-triggered-box' ) {
@@ -229,7 +229,7 @@ class Admin {
 	/**
 	 * Load plugin assets
 	 */
-	public function load_assets() {
+	public function load_assets() { 
 
 		$screen = get_current_screen();
 
@@ -249,12 +249,12 @@ class Admin {
 			// load scripts
 			wp_enqueue_script( 'scroll-triggered-boxes-admin' );
 
-			wp_localize_script( 'scroll-triggered-boxes-admin' ,'stb_i18n', array(
-					'enterCommaSeparatedValues' => __( 'Enter a comma-separated list of values.', 'scroll-triggered-boxes' ),
-					'enterCommaSeparatedPosts' => __( "Enter a comma-separated list of post slugs or post ID's..", 'scroll-triggered-boxes' ),
-					'enterCommaSeparatedPages' => __( "Enter a comma-separated list of page slugs or page ID's..", 'scroll-triggered-boxes' ),
-					'enterCommaSeparatedPostTypes' => __( "Enter a comma-separated list of post types..", 'scroll-triggered-boxes' ),
-					'enterCommaSeparatedRelativeUrls' => __( "Enter a comma-separated list of relative URL's, eg /contact/", 'scroll-triggered-boxes' ),
+			wp_localize_script( 'scroll-triggered-boxes-admin', 'stb_i18n', array( 
+					'enterCommaSeparatedValues' => __( 'Enter a comma-separated list of values.', 'scroll-triggered-boxes' ), 
+					'enterCommaSeparatedPosts' => __( "Enter a comma-separated list of post slugs or post ID's..", 'scroll-triggered-boxes' ), 
+					'enterCommaSeparatedPages' => __( "Enter a comma-separated list of page slugs or page ID's..", 'scroll-triggered-boxes' ), 
+					'enterCommaSeparatedPostTypes' => __( 'Enter a comma-separated list of post types..', 'scroll-triggered-boxes' ), 
+					'enterCommaSeparatedRelativeUrls' => __( "Enter a comma-separated list of relative URL's, eg /contact/", 'scroll-triggered-boxes' ), 
 				)
 			);
 
@@ -279,43 +279,43 @@ class Admin {
 	 *
 	 * @return bool
 	 */
-	public function add_meta_boxes( $post_type ) {
+	public function add_meta_boxes( $post_type ) { 
 
 		if ( $post_type !== 'scroll-triggered-box' ) {
 			return false;
 		}
 
-		add_meta_box(
-			'stb-box-appearance-controls',
-			__( 'Box Appearance', 'scroll-triggered-boxes' ),
-			array( $this, 'metabox_box_appearance_controls' ),
-			'scroll-triggered-box',
-			'normal',
+		add_meta_box( 
+			'stb-box-appearance-controls', 
+			__( 'Box Appearance', 'scroll-triggered-boxes' ), 
+			array( $this, 'metabox_box_appearance_controls' ), 
+			'scroll-triggered-box', 
+			'normal', 
 			'core'
 		);
 
-		add_meta_box(
-			'stb-box-options-controls',
-			__( 'Box Options', 'scroll-triggered-boxes' ),
-			array( $this, 'metabox_box_option_controls' ),
-			'scroll-triggered-box',
-			'normal',
+		add_meta_box( 
+			'stb-box-options-controls', 
+			__( 'Box Options', 'scroll-triggered-boxes' ), 
+			array( $this, 'metabox_box_option_controls' ), 
+			'scroll-triggered-box', 
+			'normal', 
 			'core'
 		);
 
-		add_meta_box(
-			'stb-support',
-			__( 'Looking for help?', 'scroll-triggered-boxes' ),
-			array( $this, 'metabox_support' ),
-			'scroll-triggered-box',
+		add_meta_box( 
+			'stb-support', 
+			__( 'Looking for help?', 'scroll-triggered-boxes' ), 
+			array( $this, 'metabox_support' ), 
+			'scroll-triggered-box', 
 			'side'
 		);
 
-		add_meta_box(
-			'stb-email-optin',
-			__( 'Subscribe to our newsletter', 'scroll-triggered-boxes' ),
-			array( $this, 'metabox_email_optin' ),
-			'scroll-triggered-box',
+		add_meta_box( 
+			'stb-email-optin', 
+			__( 'Subscribe to our newsletter', 'scroll-triggered-boxes' ), 
+			array( $this, 'metabox_email_optin' ), 
+			'scroll-triggered-box', 
 			'side'
 		);
 
@@ -326,10 +326,10 @@ class Admin {
 	 * @param \WP_Post $post
 	 * @param          $metabox
 	 */
-	public function metabox_box_appearance_controls( \WP_Post $post, $metabox ) {
+	public function metabox_box_appearance_controls( \WP_Post $post, $metabox ) { 
 
 		// get box options
-		$box  = new Box( $post );
+		$box = new Box( $post );
 		$opts = $box->get_options();
 
 		// include view
@@ -340,10 +340,10 @@ class Admin {
 	 * @param \WP_Post $post
 	 * @param          $metabox
 	 */
-	public function metabox_box_option_controls( \WP_Post $post, $metabox ) {
+	public function metabox_box_option_controls( \WP_Post $post, $metabox ) { 
 
 		// get box options
-		$box  = new Box( $post );
+		$box = new Box( $post );
 		$opts = $box->get_options();
 		$global_opts = $this->plugin['options'];
 
@@ -359,7 +359,7 @@ class Admin {
 	 * @param \WP_Post $post
 	 * @param          $metabox
 	 */
-	public function metabox_email_optin( \WP_Post $post, $metabox ) {
+	public function metabox_email_optin( \WP_Post $post, $metabox ) { 
 		include __DIR__ . '/views/metaboxes/email-optin.php';
 	}
 
@@ -367,7 +367,7 @@ class Admin {
 	 * @param \WP_Post $post
 	 * @param          $metabox
 	 */
-	public function metabox_support( \WP_Post $post, $metabox ) {
+	public function metabox_support( \WP_Post $post, $metabox ) { 
 		include __DIR__ . '/views/metaboxes/need-help.php';
 	}
 
@@ -379,7 +379,7 @@ class Admin {
 	 *
 	 * @return bool
 	 */
-	public function save_box_options( $box_id, $post ) {
+	public function save_box_options( $box_id, $post ) { 
 
 		// Only act on our own post type
 		if ( $post->post_type !== 'scroll-triggered-box' ) {
@@ -411,9 +411,9 @@ class Admin {
 		update_post_meta( $box_id, 'stb_options', $opts );
 
 		// update global settings if given
-		if( ! empty( $_POST['stb_global_settings'] ) ) {
+		if ( ! empty( $_POST['stb_global_settings'] ) ) {
 			$global_settings = get_option( 'stb_settings', array() );
-			if( ! is_array( $global_settings ) ) { $global_settings = array(); }
+			if ( ! is_array( $global_settings ) ) { $global_settings = array(); }
 			$global_settings = array_merge( $global_settings, $_POST['stb_global_settings'] );
 			update_option( 'stb_settings', $global_settings );
 		}
@@ -428,7 +428,7 @@ class Admin {
 	 *
 	 * @return array
 	 */
-	public function sanitize_settings( $opts ) {
+	public function sanitize_settings( $opts ) { 
 		return $opts;
 	}
 
@@ -437,15 +437,15 @@ class Admin {
 	 *
 	 * @return string
 	 */
-	public function sanitize_url( $url_string ) {
+	public function sanitize_url( $url_string ) { 
 
 		// if empty, just return a slash
-		if( empty( $url_string ) ) {
+		if ( empty( $url_string ) ) {
 			return '/';
 		}
 
 		// if string looks like an absolute URL, extract just the path
-		if( preg_match( '/^((https|http)?\:\/\/)?(\w+\.)?\w+\.\w+\.*/i', $url_string ) ) {
+		if ( preg_match( '/^((https|http)?\:\/\/)?(\w+\.)?\w+\.\w+\.*/i', $url_string ) ) {
 
 			// make sure URL has scheme prepended, to make parse_url() understand..
 			$url_string = 'https://' . str_replace( array( 'http://', 'https://' ), '', $url_string );
@@ -462,7 +462,7 @@ class Admin {
 	 * @param array $rule
 	 * @return array The sanitized rule array
 	 */
-	public function sanitize_box_rule( $rule) {
+	public function sanitize_box_rule( $rule ) { 
 		$rule['value'] = trim( $rule['value'] );
 
 		// don't touch empty values or manual rules
@@ -497,7 +497,7 @@ class Admin {
 	 * @param array $css
 	 * @return array
 	 */
-	public function sanitize_box_css( $css ) {
+	public function sanitize_box_css( $css ) { 
 
 		// sanitize settings
 		if ( '' !== $css['width'] ) {
@@ -531,20 +531,20 @@ class Admin {
 	 *
 	 * @return array
 	 */
-	protected function sanitize_box_options( $opts ) {
+	protected function sanitize_box_options( $opts ) { 
 
-		static $defaults = array(
-			'rules' => array(),
+		static $defaults = array( 
+			'rules' => array(), 
 			'css' => array()
 		);
 		$opts = array_merge( $defaults, $opts );
 
 		$opts['rules'] = array_map( array( $this, 'sanitize_box_rule' ), $opts['rules'] );
 		$opts['css'] = $this->sanitize_box_css( $opts['css'] );
-		$opts['cookie']             = absint( $opts['cookie'] );
-		$opts['trigger']            = sanitize_text_field( $opts['trigger'] );
+		$opts['cookie'] = absint( $opts['cookie'] );
+		$opts['trigger'] = sanitize_text_field( $opts['trigger'] );
 		$opts['trigger_percentage'] = absint( $opts['trigger_percentage'] );
-		$opts['trigger_element']    = sanitize_text_field( $opts['trigger_element'] );
+		$opts['trigger_element'] = sanitize_text_field( $opts['trigger_element'] );
 
 		return $opts;
 	}
@@ -557,7 +557,7 @@ class Admin {
 	 *
 	 * @return array
 	 */
-	public function add_plugin_settings_link( $links, $slug ) {
+	public function add_plugin_settings_link( $links, $slug ) { 
 		if ( $slug !== $this->plugin->slug() ) {
 			return $links;
 		}
@@ -576,7 +576,7 @@ class Admin {
 	 *
 	 * @return array
 	 */
-	public function add_plugin_meta_links( $links, $slug ) {
+	public function add_plugin_meta_links( $links, $slug ) { 
 		if ( $slug !== $this->plugin->slug() ) {
 			return $links;
 		}
@@ -594,7 +594,7 @@ class Admin {
 	 *
 	 * @param int $post_id
 	 */
-	public function flush_rules( $post_id ) {
+	public function flush_rules( $post_id ) { 
 
 		// only act on our own post type
 		$post = get_post( $post_id );
@@ -603,10 +603,10 @@ class Admin {
 		}
 
 		// get all published boxes
-		$boxes = get_posts(
-			array(
-				'post_type'   => 'scroll-triggered-box',
-				'post_status' => 'publish',
+		$boxes = get_posts( 
+			array( 
+				'post_type'   => 'scroll-triggered-box', 
+				'post_status' => 'publish', 
 				'numberposts' => - 1
 			)
 		);
@@ -622,7 +622,7 @@ class Admin {
 				$box_meta = get_post_meta( $box->ID, 'stb_options', true );
 
 				// add box rules to all rules
-				$rules[ $box->ID ]                = $box_meta['rules'];
+				$rules[ $box->ID ] = $box_meta['rules'];
 				$rules[ $box->ID ]['comparision'] = $box_meta['rules_comparision'];
 
 			}
@@ -637,7 +637,7 @@ class Admin {
 	 *
 	 * @return array
 	 */
-	protected function fetch_extensions() {
+	protected function fetch_extensions() { 
 
 		$extensions = get_transient( 'stb_remote_extensions' );
 		if ( $extensions ) {
@@ -669,8 +669,8 @@ class Admin {
 	 *
 	 * @return array
 	 */
-	public static function array_insert( $arr, $insert, $position ) {
-		$i   = 0;
+	public static function array_insert( $arr, $insert, $position ) { 
+		$i = 0;
 		$ret = array();
 		foreach ( $arr as $key => $value ) {
 			if ( $i == $position ) {
@@ -690,7 +690,7 @@ class Admin {
 	 *
 	 * @return string
 	 */
-	public function admin_footer_text( $text ) {
+	public function admin_footer_text( $text ) { 
 		$screen = get_current_screen();
 
 		if ( ! $screen instanceof WP_Screen ) {
