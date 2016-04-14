@@ -17,7 +17,6 @@ class STB_PHP_Fallback {
 	 * @param $plugin_file
 	 */
 	public function __construct( $plugin_name, $plugin_file ) {
-
 		$this->plugin_name = $plugin_name;
 		$this->plugin_file = $plugin_file;
 
@@ -29,7 +28,7 @@ class STB_PHP_Fallback {
 	 * @return bool
 	 */
 	public function deactivate_self() {
-		if( ! current_user_can( 'activate_plugins' ) ) {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
 			return false;
 		}
 
@@ -37,7 +36,7 @@ class STB_PHP_Fallback {
 		deactivate_plugins( $this->plugin_file );
 
 		// get rid of "Plugin activated" notice
-		if( isset( $_GET['activate'] ) ) {
+		if ( isset( $_GET['activate'] ) ) {
 			unset( $_GET['activate'] );
 		}
 
