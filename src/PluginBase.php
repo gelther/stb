@@ -39,19 +39,19 @@ class PluginBase extends Container implements iPlugin {
 	/**
 	 * Constructor
 	 *
-	 * @param int $id
+	 * @param int    $id
 	 * @param string $name
 	 * @param string $version
 	 * @param string $file
 	 * @param string $dir
 	 */
 	public function __construct( $id, $name, $version, $file, $dir ) {
-		$this->id = $id;
-		$this->name = $name;
+		$this->id      = $id;
+		$this->name    = $name;
 		$this->version = $version;
-		$this->file = $file;
-		$this->dir = $dir;
-		$this->slug = plugin_basename( $file );
+		$this->file    = $file;
+		$this->dir     = $dir;
+		$this->slug    = plugin_basename( $file );
 
 		parent::__construct();
 
@@ -115,11 +115,12 @@ class PluginBase extends Container implements iPlugin {
 	}
 
 	/**
-	 * @param string $path
+	 * @param  string $path
 	 *
 	 * @return mixed
 	 */
 	public function url( $path = '' ) {
 		return plugins_url( $path, $this->file() );
 	}
+
 }
