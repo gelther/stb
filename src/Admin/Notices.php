@@ -17,15 +17,15 @@ class Notices {
 	}
 
 	/**
-	 * @param $message
-	 * @param $type
+	 * @param  $message
+	 * @param  $type
 	 *
 	 * @return $this
 	 */
 	public function add( $message, $type = 'updated' ) {
 		$this->notices[] = array(
 			'message' => $message,
-			'type' => $type,
+			'type'    => $type,
 		);
 
 		return $this;
@@ -35,8 +35,9 @@ class Notices {
 	 * Output the registered notices
 	 */
 	public function show() {
-		foreach( $this->notices as $notice ) {
+		foreach ( $this->notices as $notice ) {
 			echo sprintf( '<div class="notice notice-%s"><p>%s</p></div>', $notice['type'], $notice['message'] );
 		}
 	}
+
 }
