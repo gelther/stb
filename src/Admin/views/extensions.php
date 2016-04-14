@@ -3,13 +3,13 @@
 
 	<h2><?php _e( 'Available Add-On Plugins', 'scroll-triggered-boxes' ); ?></h2>
 	<p>
-		<?php _e( "There are various add-ons available for Scroll Triggered Boxes which further enhance the functionality of the core plugin.", 'scroll-triggered-boxes' ); ?>
+		<?php _e( 'There are various add-ons available for Scroll Triggered Boxes which further enhance the functionality of the core plugin.', 'scroll-triggered-boxes' ); ?>
 	</p>
 	<p>
 		<?php printf( __( 'To gain instant access the premium add-on plugins listed here, <a href="%s">have a look at the available premium plans</a>.', 'scroll-triggered-boxes' ), 'https://scrolltriggeredboxes.com/pricing#utm_source=wp-plugin&utm_medium=scroll-triggered-boxes&utm_campaign=extensions-page' ); ?>
 	</p>
 
-	<?php if( empty( $extensions ) ) : ?>
+	<?php if ( empty( $extensions ) ) : ?>
 		<script>
 			window.setTimeout( function() {
 				window.location.href = 'https://scrolltriggeredboxes.com/plugins#utm_source=wp-plugin&utm_medium=scroll-triggered-boxes&utm_campaign=extensions-page';
@@ -19,7 +19,7 @@
 		<p><?php printf( __( 'If not, please click here: %s.', 'scroll-triggered-boxes' ), '<a href="https://scrolltriggeredboxes.com/plugins#utm_source=wp-plugin&utm_medium=scroll-triggered-boxes&utm_campaign=extensions-page" target="_blank">View add-on plugins</a>' ); ?></p>
 	<?php else : ?>
 
-		<?php foreach( $extensions as $plugin ) : ?>
+		<?php foreach ( $extensions as $plugin ) : ?>
 
 		<div class="plugin">
 			<a href="<?php echo esc_url( $plugin->page_url ); ?>" class="unstyled"><img src="<?php echo esc_url( $plugin->image_url ); ?>" alt="<?php echo $plugin->name; ?>" width="280" height="220"></a>
