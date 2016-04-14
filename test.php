@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function scroll_triggered_boxes() {
 	static $instance;
 
-	if( is_null( $instance ) ) {
+	if ( is_null( $instance ) ) {
 
 		$classname =  'ScrollTriggeredBoxes\\Plugin';
 		$id = 0;
@@ -80,7 +80,7 @@ function __load_scroll_triggered_boxes_fallback() {
 	new STB_PHP_Fallback( 'Scroll Triggered Boxes', plugin_basename( __FILE__ ) );
 }
 
-if( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
+if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 	__load_scroll_triggered_boxes();
 } else {
 	__load_scroll_triggered_boxes_fallback();
