@@ -35,7 +35,7 @@ interface iPlugin {
 	public function dir();
 
 	/**
-	 * @param string $path
+	 * @param  string $path
 	 *
 	 * @return mixed
 	 */
