@@ -13,7 +13,6 @@ class LicenseServiceProvider implements ServiceProviderInterface {
 	 * @param Container $container
 	 */
 	public function register( Container $container ) {
-
 		$container['api_url'] = function( $container ) {
 			return 'https://scrolltriggeredboxes.com/api/v1';
 		};
@@ -37,7 +36,6 @@ class LicenseServiceProvider implements ServiceProviderInterface {
 		$container['api_authenticator'] = function( $container ) {
 			return new Authenticator( $container['api_url'], $container['license'] );
 		};
-
 	}
 
 }
