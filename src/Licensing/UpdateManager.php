@@ -36,8 +36,8 @@ class UpdateManager {
 	 */
 	public function __construct( Collection $extensions, API $api, License $license ) {
 		$this->extensions = $extensions;
-		$this->license = $license;
-		$this->api = $api;
+		$this->license    = $license;
+		$this->api        = $api;
 	}
 
 	/**
@@ -49,26 +49,25 @@ class UpdateManager {
 	}
 
 	/**
-	 * @param        $result
-	 * @param string $action
-	 * @param null   $args
+	 * @param         $result
+	 * @param  string $action
+	 * @param  null   $args
 	 *
 	 * @return object
 	 */
 	public function get_plugin_info( $result, $action = '', $args = null ) {
-
 		// do nothing for unrelated requests
-		if( $action !== 'plugin_information' || ! isset( $args->slug ) ) {
+		if ( $action !== 'plugin_information' || ! isset( $args->slug ) ) {
 			return $result;
 		}
 
 		// only act on our plugins
 		$plugin = $this->extensions->find( function( $p ) use($args) {
 			return dirname( $p->slug() ) == $args->slug;
-		});
+		} );
 
 		// was it a plugin of ours?
-		if( $plugin ) {
+		if ( $plugin ) {
 			return $this->get_update_info( $plugin );
 		}
 
@@ -76,13 +75,12 @@ class UpdateManager {
 	}
 
 	/**
-	 * @param object $updates
+	 * @param  object $updates
 	 * @return object
 	 */
 	public function add_updates( $updates ) {
-
-		if( empty( $updates )
-		    || ! isset( $updates->response )
+		if ( empty( $updates )
+			|| ! isset( $updates->response )
 			|| ! is_array( $updates->response ) ) {
 			return $updates;
 		}
@@ -102,8 +100,7 @@ class UpdateManager {
 	 * @return array
 	 */
 	protected function fetch_updates() {
-
-		if( is_array( $this->available_updates ) ) {
+		if ( is_array( $this->available_updates ) ) {
 			return $this->available_updates;
 		}
 
@@ -114,7 +111,7 @@ class UpdateManager {
 		$this->available_updates = array();
 
 		// did we get a valid response?
-		if( ! is_array( $remote_plugins  ) ) {
+		if ( ! is_array( $remote_plugins ) ) {
 			return $this->available_updates;
 		}
 
@@ -122,19 +119,17 @@ class UpdateManager {
 		$this->available_updates = $this->filter_remote_plugins( $remote_plugins );
 
 		return $this->available_updates;
-
 	}
 
 	/**
-	 * @param $remote_plugins
+	 * @param        $remote_plugins
 	 * @return array
 	 */
 	protected function filter_remote_plugins( $remote_plugins ) {
-
 		$available_updates = array();
 
 		// find new versions
-		foreach( $remote_plugins as $remote_plugin ) {
+		foreach ( $remote_plugins as $remote_plugin ) {
 
 			// find corresponding local plugin
 			$plugin = $this->extensions->find(
@@ -144,7 +139,7 @@ class UpdateManager {
 			);
 
 			// plugin found and local plugin version not same as remote version?
-			if( ! $plugin || version_compare( $plugin->version(), $remote_plugin->version, '>=' ) ) {
+			if ( ! $plugin || version_compare( $plugin->version(), $remote_plugin->version, '>=' ) ) {
 				continue;
 			}
 
@@ -156,14 +151,14 @@ class UpdateManager {
 	}
 
 	/**
-	 * @param iPlugin $plugin
+	 * @param  iPlugin $plugin
 	 *
 	 * @return null
 	 */
 	public function get_update_info( iPlugin $plugin ) {
 		$available_updates = $this->fetch_updates();
 
-		if( isset( $available_updates[ $plugin->slug() ] ) ) {
+		if ( isset( $available_updates[ $plugin->slug() ] ) ) {
 			return $available_updates[ $plugin->slug() ];
 		}
 
@@ -171,29 +166,29 @@ class UpdateManager {
 	}
 
 	/**
-	 * @param iPlugin $plugin
-	 * @param         $response
+	 * @param  iPlugin $plugin
+	 * @param          $response
 	 *
 	 * @return mixed
 	 */
 	protected function format_response( iPlugin $plugin, $response ) {
 		$response->new_version = $response->version;
-		$response->slug = dirname( $plugin->slug() );
-		$response->plugin = $plugin->slug();
+		$response->slug        = dirname( $plugin->slug() );
+		$response->plugin      = $plugin->slug();
 
 		// load license
 		$this->license->load();
 
 		// add some notices if license is inactive
-		if( ! $this->license->activated ) {
-			$response->upgrade_notice = sprintf( 'You will need to <a href="%s">activate your license</a> to install this plugin update.', admin_url( 'edit.php?post_type=scroll-triggered-box&page=stb-settings' ) );
+		if ( ! $this->license->activated ) {
+			$response->upgrade_notice      = sprintf( 'You will need to <a href="%s">activate your license</a> to install this plugin update.', admin_url( 'edit.php?post_type=scroll-triggered-box&page=stb-settings' ) );
 			$response->sections->changelog = '<p>' . sprintf( 'You will need to <a href="%s" target="_top">activate your license</a> to install this plugin update.', admin_url( 'edit.php?post_type=scroll-triggered-box&page=stb-settings' ) ) . '</p>' . $response->sections->changelog;
-			$response->package = null;
+			$response->package             = null;
 		}
 
 		// cast subkey objects to array as that is what WP expects
 		$response->sections = get_object_vars( $response->sections );
-		$response->banners = get_object_vars( $response->banners );
+		$response->banners  = get_object_vars( $response->banners );
 
 		return $response;
 	}
