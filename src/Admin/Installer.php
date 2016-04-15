@@ -17,9 +17,8 @@ class Installer {
 	 * The main install method
 	 */
 	public function install() {
-
 		// don't install sample boxes on multisite
-		if( is_multisite() ) {
+		if ( is_multisite() ) {
 			return;
 		}
 
@@ -30,25 +29,24 @@ class Installer {
 	 * @return bool
 	 */
 	protected function create_sample_box() {
-
 		// only create sample box if no boxes were found
 		$boxes = get_posts(
 			array(
-				'post_type' => 'scroll-triggered-box',
+				'post_type'   => 'scroll-triggered-box',
 				'post_status' => array( 'publish', 'draft' )
 			)
 		);
 
-		if( ! empty( $boxes ) ) {
+		if ( ! empty( $boxes ) ) {
 			return false;
 		}
 
 		$box_id = wp_insert_post(
 			array(
-				'post_type' => 'scroll-triggered-box',
-				'post_title' => "Sample Box",
-				'post_content' => "<h4>Hello world.</h4><p>This is a sample box, with some sample content in it.</p>",
-				'post_status' => 'draft',
+				'post_type'    => 'scroll-triggered-box',
+				'post_title'   => 'Sample Box',
+				'post_content' => '<h4>Hello world.</h4><p>This is a sample box, with some sample content in it.</p>',
+				'post_status'  => 'draft',
 			)
 		);
 
@@ -56,13 +54,13 @@ class Installer {
 		$settings = array(
 				'css' => array(
 				'background_color' => '#edf9ff',
-				'color' => '',
-				'width' => '340',
-				'border_color' => '#dd7575',
-				'border_width' => '4',
-				'border_style' => 'dashed',
-				'position' => 'bottom-right',
-				'manual' => ''
+				'color'            => '',
+				'width'            => '340',
+				'border_color'     => '#dd7575',
+				'border_width'     => '4',
+				'border_style'     => 'dashed',
+				'position'         => 'bottom-right',
+				'manual'           => ''
 			)
 		);
 
@@ -70,4 +68,5 @@ class Installer {
 
 		return true;
 	}
+
 }
