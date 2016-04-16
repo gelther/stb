@@ -45,4 +45,5 @@ class PluginServiceProvider implements ServiceProviderInterface {
 			return new Filter\Autocomplete();
 		};
 	}
+
 }

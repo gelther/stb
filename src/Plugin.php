@@ -21,14 +21,14 @@ final class Plugin extends PluginBase {
 
 		add_action( 'init', array( $this, 'register_post_type' ) );
 
-		if( ! is_admin() ) {
+		if ( ! is_admin() ) {
 			add_action( 'template_redirect', function() use( $container ) {
 				$container['box_loader']->init();
-			});
+			} );
 		} elseif( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) {
-			add_action('init', function() use( $container ) {
+			add_action( 'init', function() use( $container ) {
 				$container['admin']->init();
-			});
+			} );
 		} else {
 			$container['filter.autocomplete']->add_hooks();
 		}
@@ -40,8 +40,8 @@ final class Plugin extends PluginBase {
 	public function register_post_type() {
 		// Register custom post type
 		$args = array(
-			'public' => false,
-			'labels'  =>  array(
+			'public'        => false,
+			'labels'        =>  array(
 				'name'               => __( 'Scroll Triggered Boxes', 'scroll-triggered-boxes' ),
 				'singular_name'      => __( 'Scroll Triggered Box', 'scroll-triggered-boxes' ),
 				'add_new'            => __( 'Add New', 'scroll-triggered-boxes' ),
@@ -56,10 +56,10 @@ final class Plugin extends PluginBase {
 				'parent_item_colon'  => '',
 				'menu_name'          => __( 'Scroll Triggered Boxes', 'scroll-triggered-boxes' )
 			),
-			'show_ui' => true,
+			'show_ui'       => true,
 			'menu_position' => '108.1337133',
-			'menu_icon' => $this->url( '/assets/img/menu-icon.png' ),
-			'query_var' => false
+			'menu_icon'     => $this->url( '/assets/img/menu-icon.png' ),
+			'query_var'     => false
 		);
 
 		register_post_type( 'scroll-triggered-box', $args );
