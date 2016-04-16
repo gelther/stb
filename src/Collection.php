@@ -33,14 +33,14 @@ class Collection implements \Iterator, \Countable {
 	}
 
 	/**
-	 * @param $callback
+	 * @param        $callback
 	 *
 	 * @return array
 	 */
-	function map($callback) {
+	function map( $callback ) {
 		$result = array();
 
-		foreach( $this->elements as $element ) {
+		foreach ( $this->elements as $element ) {
 			$result[] = $callback( $element );
 		}
 
@@ -48,14 +48,13 @@ class Collection implements \Iterator, \Countable {
 	}
 
 	/**
-	 * @param $callback
+	 * @param       $callback
 	 *
 	 * @return null
 	 */
-	function find($callback) {
-
-		foreach( $this->elements as $element ) {
-			if( $callback( $element ) ) {
+	function find( $callback ) {
+		foreach ( $this->elements as $element ) {
+			if ( $callback( $element ) ) {
 				return $element;
 			}
 		}
@@ -75,4 +74,5 @@ class Collection implements \Iterator, \Countable {
 	public function count() {
 		return count( $this->elements );
 	}
+
 }
