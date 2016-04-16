@@ -40,8 +40,8 @@ class License {
 	 * @var array
 	 */
 	protected $default_data = array(
-		'key' => '',
-		'activated' => false,
+		'key'        => '',
+		'activated'  => false,
 		'expires_at' => ''
 	);
 
@@ -66,18 +66,18 @@ class License {
 	 * @param $name
 	 * @param $value
 	 */
-	public function __set($name, $value) {
+	public function __set( $name, $value ) {
 		$this->$name = $value;
 		$this->dirty = true;
 	}
 
 	/**
-	 * @param $name
+	 * @param       $name
 	 *
 	 * @return null
 	 */
-	public function __get($name) {
-		if( property_exists( $this, $name ) ) {
+	public function __get( $name ) {
+		if ( property_exists( $this, $name ) ) {
 			return $this->$name;
 		}
 
@@ -85,7 +85,7 @@ class License {
 	}
 
 	/**
-	 * @param $name
+	 * @param       $name
 	 *
 	 * @return bool
 	 */
@@ -99,19 +99,18 @@ class License {
 	 * @return License
 	 */
 	public function load() {
-
-		if( ! $this->loaded ) {
+		if ( ! $this->loaded ) {
 			$data = (array) get_option( $this->option_key, array() );
 
-			if( ! empty( $data ) ) {
-				$data = array_merge( $this->default_data, $data );
-				$this->key = (string) $data['key'];
-				$this->activated = (bool) $data['activated'];
+			if ( ! empty( $data ) ) {
+				$data             = array_merge( $this->default_data, $data );
+				$this->key        = (string) $data['key'];
+				$this->activated  = (bool) $data['activated'];
 				$this->expires_at = (string) $data['expires_at'];
 			}
 
 			// always fill site
-			$this->site = get_option( 'siteurl' );
+			$this->site   = get_option( 'siteurl' );
 			$this->loaded = true;
 		}
 
@@ -134,8 +133,7 @@ class License {
 	 * @return License
 	 */
 	public function save() {
-
-		if( $this->dirty ) {
+		if ( $this->dirty ) {
 			$data = $this->toArray();
 			update_option( $this->option_key, $data );
 			$this->dirty = false;
@@ -151,9 +149,9 @@ class License {
 	 */
 	public function toArray() {
 		$data = array(
-			'key' => $this->key,
+			'key'        => $this->key,
 			'expires_at' => $this->expires_at,
-			'activated' => $this->activated
+			'activated'  => $this->activated
 		);
 
 		return $data;
@@ -164,7 +162,7 @@ class License {
 	 */
 	public function activate() {
 		$this->activated = true;
-		$this->dirty = true;
+		$this->dirty     = true;
 	}
 
 	/**
@@ -172,7 +170,7 @@ class License {
 	 */
 	public function deactivate() {
 		$this->activated = false;
-		$this->dirty = true;
+		$this->dirty     = true;
 	}
 
 }
